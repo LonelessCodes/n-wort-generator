@@ -1,5 +1,5 @@
 <template>
-  <div ref="rootElem" class="word-reel">
+  <div ref="rootElem" class="reel-stage-container">
     <div class="reel-stage">
       <div
         class="reel"
@@ -40,15 +40,16 @@ const props = defineProps<{
 
 const rootElem = ref<HTMLElement | null>(null);
 
+// constants
+const baseDuration = ref(4);
+const slotsPerReel = ref(SLOTS_PER_REEL);
+const slotAngle = computed(() => 360 / slotsPerReel.value);
+const animationDuration = computed(() => baseDuration.value + props.offsetSecs);
+
 const { height } = useElementSize(rootElem, {
   height: 0,
   width: 0,
 });
-
-const baseDuration = ref(4);
-const animationDuration = computed(() => baseDuration.value + props.offsetSecs);
-const slotsPerReel = computed(() => props.words.length);
-const slotAngle = computed(() => 360 / slotsPerReel.value);
 const panelHeight = computed(() => height.value * 0.42);
 const reelRadius = computed(() =>
   Math.round(panelHeight.value / 2 / Math.tan(Math.PI / slotsPerReel.value)),
@@ -76,8 +77,13 @@ watch(
     prevSeed.value = seed.value;
     seed.value = getSeed(prevSeed.value);
 
+    // create a new array of slotsPerReel length and fill it with the words (repeating them if necessary)
+    const filledWords = new Array<string>(slotsPerReel.value);
+    for (let i = 0; i < slotsPerReel.value; i++) {
+      filledWords[i] = newWords[i % newWords.length];
+    }
     // rotate the words array by the seed, so that the first word is the one at the seed index
-    const rotatedWords = [...newWords.slice(-seed.value), ...newWords.slice(0, -seed.value)];
+    const rotatedWords = [...filledWords.slice(-seed.value), ...filledWords.slice(0, -seed.value)];
     // replace elements of the new array with the currently visible ones so it looks seemless
     for (let i = -1; i <= 1; i++) {
       rotatedWords[
@@ -94,18 +100,27 @@ watch(
 
 const onAnimationEnd = () => {};
 
-export interface WordReelExpose {
-  seed: Ref<number>;
-  prevSeed: Ref<number>;
-}
-defineExpose<WordReelExpose>({
+defineExpose<ReelStageExpose>({
   seed,
   prevSeed,
 });
 </script>
 
+<script lang="ts">
+export const SLOTS_PER_REEL = 12;
+
+export interface ReelStageExpose {
+  seed: Ref<number>;
+  prevSeed: Ref<number>;
+}
+</script>
+
 <style lang="scss">
-.word-reel {
+// constants
+$slots-per-reel: 12;
+$slot-angle: 360 / $slots-per-reel;
+
+.reel-stage-container {
   --gold-dark: #57170b;
   --gold: #c47b2c;
   --gold-light: #f4e787;
@@ -118,7 +133,8 @@ defineExpose<WordReelExpose>({
   background-color: black;
   border-radius: var(--border-radius);
 }
-.word-reel::before {
+// inner shadow
+.reel-stage-container::before {
   --border-width: 0.5em;
   content: "";
   position: absolute;
@@ -134,7 +150,7 @@ defineExpose<WordReelExpose>({
   );
   border-radius: calc(var(--border-radius) + var(--border-width));
 }
-.word-reel::after {
+.reel-stage-container::after {
   content: "";
   position: absolute;
   top: 0;
@@ -184,6 +200,7 @@ defineExpose<WordReelExpose>({
   width: var(--width);
   background: #fff;
   color: black;
+  // debug
   // border: solid 1px #000;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
@@ -206,27 +223,22 @@ defineExpose<WordReelExpose>({
 }
 
 $roll-by: 360 * 10;
-// $roll-by: 360;
 
-@for $to from 0 through 11 {
+@for $to from 0 through ($slots-per-reel - 1) {
   .spin-#{$to} {
-    transform: rotateX(-#{$roll-by + $to * 30}deg);
-
-    // > .slot[data-index="#{$to}"] p {
-    //   font-weight: bold;
-    // }
+    --rotate-x: -#{$roll-by + $to * $slot-angle}deg;
+    transform: rotateX(-#{$roll-by + $to * $slot-angle}deg);
   }
-}
 
-// generate from-to spin animations for all 12 slots
-@for $from from 0 through 11 {
-  @for $to from 0 through 11 {
+  // generate from-to spin animations for all 12 slots
+  @for $from from 0 through ($slots-per-reel - 1) {
     @keyframes spin-#{$from}-#{$to} {
       0% {
-        transform: rotateX(-#{$from * 30}deg);
+        transform: rotateX(-#{$from * $slot-angle}deg);
       }
       100% {
-        transform: rotateX(-#{$roll-by + $to * 30}deg);
+        transform: rotateX(-#{$roll-by + $to * $slot-angle}deg);
+        // transform: rotateX(var(--rotate-x));
       }
     }
   }

@@ -9,6 +9,8 @@ const SERVICE_UUID = "a88412db-f938-4ca0-8a33-955a60f4d04d";
 const LED_CHAR_UUID = "854f59dc-17c8-4cc2-8d14-006cd02cf066";
 const BUT_CHAR_UUID = "d2c1f2b9-9d00-478f-8241-a3a071be351c";
 
+// TODO: Add autoreconnect to gatt server feature
+
 export default createGlobalState(() => {
   const bleConnectionStatus = ref<"disconnected" | "connected" | "connecting">("disconnected");
   const bleConnectionError = ref<string | null>(null);
