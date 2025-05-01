@@ -1,24 +1,26 @@
 <template>
-  <div ref="rootElem" class="reel-stage-container">
-    <div class="reel-stage">
-      <div
-        class="reel"
-        :style="{
-          animation: `spin-${prevSeed}-${seed} ${animationDuration}s cubic-bezier(0.43,-0.1, 0.25, 1)`,
-        }"
-        :class="`spin-${seed}`"
-        @animationend="onAnimationEnd"
-      >
+  <div class="reel-stage-container">
+    <div ref="rootElem" class="reel-border">
+      <div class="reel-stage">
         <div
-          class="slot"
-          v-for="(word, index) in processedWords"
-          :key="index"
-          :data-index="index"
+          class="reel"
           :style="{
-            transform: `rotateX(${slotAngle * index}deg) translateZ(${reelRadius}px)`,
+            animation: `spin-${prevSeed}-${seed} ${animationDuration}s cubic-bezier(0.43,-0.1, 0.25, 1)`,
           }"
+          :class="`spin-${seed}`"
+          @animationend="onAnimationEnd"
         >
-          <p>{{ word }}</p>
+          <div
+            class="slot"
+            v-for="(word, index) in processedWords"
+            :key="index"
+            :data-index="index"
+            :style="{
+              transform: `rotateX(${slotAngle * index}deg) translateZ(${reelRadius}px)`,
+            }"
+          >
+            <p>{{ word }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -125,20 +127,13 @@ $slot-angle: 360 / $slots-per-reel;
   --gold: #c47b2c;
   --gold-light: #f4e787;
   --border-radius: 1.5em;
+  --shine-border-width: 0.5em;
+  --dark-border-width: 0.333em;
+
   font-size: 1rem;
-  position: relative;
-  width: 72em;
-  height: 13em;
-  background-color: white;
   background-color: black;
   border-radius: var(--border-radius);
-}
-// inner shadow
-.reel-stage-container::before {
-  --border-width: 0.5em;
-  content: "";
-  position: absolute;
-  inset: calc(var(--border-width) * -1);
+  padding: var(--shine-border-width);
   background-image: linear-gradient(
     75deg,
     var(--gold-dark) 0%,
@@ -148,9 +143,30 @@ $slot-angle: 360 / $slots-per-reel;
     var(--gold-dark) 70.5%,
     var(--gold) 100%
   );
-  border-radius: calc(var(--border-radius) + var(--border-width));
+  border-radius: calc(var(--border-radius) + var(--shine-border-width) + var(--dark-border-width));
 }
-.reel-stage-container::after {
+
+.reel-border {
+  background-color: blacK;
+  padding: var(--dark-border-width);
+  border-radius: calc(var(--border-radius) + var(--dark-border-width));
+}
+
+.reel-stage {
+  position: relative;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-color: white;
+  width: 72em;
+  height: 12em;
+  padding-top: calc((v-bind(height) - v-bind(panelHeight)) / 2 * 1px);
+
+  -webkit-perspective: 35em;
+  -moz-perspective: 35em;
+  perspective: 35em; /* Setting the perspective of the contents of the stage but not the stage itself*/
+}
+// inner shadow
+.reel-stage::after {
   content: "";
   position: absolute;
   top: 0;
@@ -168,19 +184,6 @@ $slot-angle: 360 / $slots-per-reel;
   );
   box-shadow: inset 0 0 0.6em 0.125em rgba(black, 0.3);
   border-radius: var(--border-radius);
-}
-
-.reel-stage {
-  border-radius: var(--border-radius);
-  overflow: hidden;
-  background-color: white;
-  width: 100%;
-  height: 100%;
-  padding-top: calc((v-bind(height) - v-bind(panelHeight)) / 2 * 1px);
-
-  -webkit-perspective: 35em;
-  -moz-perspective: 35em;
-  perspective: 35em; /* Setting the perspective of the contents of the stage but not the stage itself*/
 }
 
 .reel {
@@ -209,7 +212,7 @@ $slot-angle: 360 / $slots-per-reel;
 
 .slot p {
   font-family: "Changa One", system-ui;
-  font-family: "Abril Fatface", system-ui;
+  font-family: var(--font-fancy);
   font-size: calc(var(--height) * 0.8);
   text-align: center;
   font-weight: normal;

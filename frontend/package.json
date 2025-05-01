@@ -14,8 +14,12 @@
   },
   "dependencies": {
     "@csstools/normalize.css": "^12.1.1",
+    "@fontsource-variable/grandstander": "^5.2.5",
+    "@fontsource-variable/pixelify-sans": "^5.2.5",
     "@fontsource/abril-fatface": "^5.2.5",
     "@fontsource/changa-one": "^5.2.5",
+    "@fontsource/fugaz-one": "^5.2.5",
+    "@fontsource/sigmar-one": "^5.2.5",
     "@heroicons/vue": "^2.2.0",
     "@vueuse/core": "^13.1.0",
     "@vueuse/motion": "^3.0.3",
