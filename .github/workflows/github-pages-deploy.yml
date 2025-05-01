@@ -1,0 +1,51 @@
+name: Deploy to GitHub Pages
+on: [push]
+permissions:
+  contents: read # for accessing the repository contents
+  id-token: write # for verifying the deployment source
+  pages: write # to be able deploy to GitHub Pages
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+        # steps for building the project
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org/
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: frontend/dist
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{steps.deployment.outputs.page_url}}
+    runs-on: ubuntu-latest
+    steps:
+      # steps for deploying the build artifact to GitHub Pages
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifact
+      - name: Set up Pages
+        uses: actions/configure-pages@v2
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: .
+      - name: Deploy
+        id: deployment # it was previously used to get the deployment URL
+        uses: actions/deploy-pages@v1
