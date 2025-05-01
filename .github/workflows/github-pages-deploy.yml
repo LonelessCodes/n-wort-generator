@@ -13,9 +13,9 @@ jobs:
     steps:
         # steps for building the project
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set up Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3.9.1
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org/
@@ -24,7 +24,7 @@ jobs:
       - name: Build
         run: npm run build
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-artifact
           path: frontend/dist
@@ -37,15 +37,15 @@ jobs:
     steps:
       # steps for deploying the build artifact to GitHub Pages
       - name: Download build artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.3.0
         with:
           name: build-artifact
       - name: Set up Pages
-        uses: actions/configure-pages@v2
+        uses: actions/configure-pages@v5
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: .
       - name: Deploy
         id: deployment # it was previously used to get the deployment URL
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
