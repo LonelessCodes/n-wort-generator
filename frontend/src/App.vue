@@ -26,6 +26,9 @@
           <stop offset="70%" style="stop-color: #fffe1a; stop-opacity: 1" />
         </linearGradient>
       </defs>
+
+      <!-- 100 small circles in a circle -->
+
       <path
         d="M 156 0 L 192 960 A 156 60 90 0 1 168 1080 H 1752 A 156 60 90 0 1 1728 960 L 1764 0 Z"
         fill="url(#grad-maschine-außen)"
@@ -352,19 +355,21 @@ onButPressed(() => {
 
 .result-text-word0 {
   font-family: var(--font-title);
-  top: 31vh;
+  top: 36vh;
+  line-height: 0.8;
   font-size: 9em;
   left: -3vw;
 }
 .result-text-nicht {
   font-family: var(--font-handwriting);
-  top: 46vh;
+  top: 45.8vh;
   font-size: 4em;
   left: 11vw;
 }
 .result-text-word1 {
   font-family: var(--font-pixel);
-  top: 48vh;
+  top: 52.5vh;
+  line-height: 0.8;
   font-size: 8em;
   left: 8vw;
 }
@@ -481,19 +486,19 @@ onButPressed(() => {
   }
 
   .result-text-nettles {
-    animation: bounce-in-top 1.1s both 0.5s;
+    animation: bounce-in-top 1.1s both 0.2s;
   }
   .result-text-word0 {
-    animation: tilt-in-fwd-tr 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both 1.5s;
+    animation: tilt-in-fwd-tr 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both 1.2s;
   }
   .result-text-nicht {
-    animation: slide-in-bck-center 0.7s ease-out both 2.5s;
+    animation: slide-in-bck-center 0.7s ease-out both 2s;
   }
   .result-text-word1 {
-    animation: roll-in-right 0.6s ease-out both 3.5s;
+    animation: roll-in-right 0.6s ease-out both 2.8s;
   }
   .result-text-neetup {
-    animation: slide-in-elliptic-top-fwd 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both 4.5s;
+    animation: slide-in-elliptic-top-fwd 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both 3.4s;
   }
 }
 
