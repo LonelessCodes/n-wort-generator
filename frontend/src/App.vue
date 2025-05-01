@@ -74,7 +74,6 @@
     <div
       class="setup-overlay"
       :class="{ 'setup-overlay--show': bleConnectionStatus !== 'connected' }"
-      v-show="false"
     >
       <div class="setup-overlay_icon">
         <IconWrap>
