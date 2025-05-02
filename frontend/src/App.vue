@@ -574,13 +574,11 @@ onButPressed(() => {
 
 @keyframes slide-in-elliptic-top-fwd {
   0% {
-    transform: rotate(var(--rotate)) translateY(600px) rotateX(-30deg) scale(0);
-    transform-origin: 50% 200%;
+    transform: rotate(var(--rotate)) translateY(600px) rotateX(-30deg) scale(0) translateZ(-200%);
     opacity: 0;
   }
   100% {
-    transform: rotate(var(--rotate)) translateY(0) rotateX(0) scale(1);
-    transform-origin: 50% 50%;
+    transform: rotate(var(--rotate)) translateY(0) rotateX(0) scale(1) translateZ(0);
     opacity: 1;
   }
 }
