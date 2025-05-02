@@ -123,6 +123,7 @@ import WordReel, { SLOTS_PER_REEL, type ReelStageExpose } from "@/components/Ree
 import useBluetoothButton from "@/composables/useBluetoothButton";
 
 import { generateNArraysOfMRandomNwoerter } from "./n-woerter";
+import { supabase } from "@/lib/supabase";
 
 const reel0 = ref<ReelStageExpose>();
 const reel1 = ref<ReelStageExpose>();
@@ -167,6 +168,24 @@ const spin = () => {
 
   // Generate new random words
   words.value = generateNArraysOfMRandomNwoerter(2, SLOTS_PER_REEL);
+  // Write words to database
+  supabase
+    .from("generated-words")
+    .insert([
+      {
+        word0: words.value[0][0],
+        word1: words.value[1][0],
+        host: window.location.href,
+      },
+    ])
+    .then(({ error }) => {
+      if (error) {
+        console.error("Error inserting data:", error.message);
+      } else {
+        console.log("Data inserted successfully");
+      }
+    });
+
   // Set the state to rolling
   state.value = "rolling";
   setTimeout(() => {

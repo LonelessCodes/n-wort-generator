@@ -21,6 +21,7 @@
     "@fontsource/fugaz-one": "^5.2.5",
     "@fontsource/sigmar-one": "^5.2.5",
     "@heroicons/vue": "^2.2.0",
+    "@supabase/supabase-js": "^2.49.4",
     "@vueuse/core": "^13.1.0",
     "@vueuse/motion": "^3.0.3",
     "@vueuse/sound": "^2.1.3",
